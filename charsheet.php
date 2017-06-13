@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html>
-<body>
-<?php
-include "config.php";
-include "functions.php";
-$charname = $playername = "Not Defined";
-?>
+    <head> 
+        <link rel="stylesheet" type="text/css" href="/architech.css"> 
+    </head>
+    <body>
+        <?php
+        include "config.php";
+        include "functions.php";
+        $char = new Character;
+        ?>
 
-<div = "sheet">
-<div = "sheetTop">
-<?php echo("Character: $charname      Player: $playername") ?>
-
-<?php
-	dotloop(5,"W");
-?>
-
-</div>
-</body>
+        <div class="sheet">
+            <div class="sheetTop">
+            <?php echo("Character: $char->name || Player: $char->player || Chronicle: $char->chronicle <br>"
+                    . "Clan: $char->clan || Bloodline: $char->bloodline || Covenant: $char->covenant <br>"
+                    . "Virtue: $char->virtue || Vice: $char->vice || Concept: $char->concept<br>") ?>
+            </div>
+            <?php $char->int = 3; ?>
+            <div class="sheetTop">
+            <?php          
+                    echo("------ || ----Mental---- || ----Physical---- || ----Social---- <br>");
+                   echo("Power || Intelligence: ");
+                   dotloop($char->int,"B");
+                   dotloop(5-$char->int,"W");
+            ?>
+            </div>            
+            
+        </div>
+    </body>
 </html>
