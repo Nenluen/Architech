@@ -73,13 +73,15 @@ function checkTable($con, $dBs)
             #For New WOD Requiem Characters.
             $sql="CREATE TABLE if not exists architect.characters(ID INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(ID), name TINYTEXT NOT NULL, virtue TINYTEXT, vice TINYTEXT, type TINYTEXT, 
                     maingroup TINYTEXT, subgroup TINYTEXT, faction TINYTEXT, chronicle TINYTEXT, concept TINYTEXT, experience INT, experienceSpent INT, 
+                    health TINYINT, willpower TINYINT, potency TINYINT, resource TINYINT, morality TINYINT,
                     inte TINYINT, wit TINYINT, res TINYINT, str TINYINT, dex TINYINT, sta TINYINT, pre TINYINT, man TINYINT, com TINYINT, 
                     aca TINYINT, cra TINYINT, comp TINYINT, inv TINYINT, med TINYINT, occ TINYINT, pol TINYINT, sci TINYINT,
                     ath TINYINT, bra TINYINT, dri TINYINT, fir TINYINT, lar TINYINT, ste TINYINT, sur TINYINT, wea TINYINT,
                     ani TINYINT, emp TINYINT, exp TINYINT, inti TINYINT, per TINYINT, soc TINYINT, stre TINYINT, sub TINYINT,
                     acaS TINYTEXT, craS TINYTEXT, compS TINYTEXT, invS TINYTEXT, medS TINYTEXT, occS TINYTEXT, polS TINYTEXT, sciS TINYTEXT, 
                     athS TINYTEXT, braS TINYTEXT, driS TINYTEXT, firS TINYTEXT, larS TINYTEXT, steS TINYTEXT, surS TINYTEXT, weaS TINYTEXT, 
-                    aniS TINYTEXT, empS TINYTEXT, expS TINYTEXT, intiS TINYTEXT, perS TINYTEXT, socS TINYTEXT, strS TINYTEXT, subS TINYTEXT)";
+                    aniS TINYTEXT, empS TINYTEXT, expS TINYTEXT, intiS TINYTEXT, perS TINYTEXT, socS TINYTEXT, strS TINYTEXT, subS TINYTEXT
+                    )";
             
 
 
@@ -106,18 +108,41 @@ function checkTable($con, $dBs)
 		$sql="CREATE TABLE if not exists architect.games(ID INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(ID), name CHAR(100), date DATE)";
 		mysqli_query($con,$sql);
 	}
-	if(!mysqli_query($con,'select 1 from `downtimes`'))
+	if(!mysqli_query($con,'select 1 from `char_games`'))
+	{
+		#creates a table to associate the many games to many characters, so that you can have multiple games attended by multiple characters, SQL stuff
+		$sql="CREATE TABLE if not exists architect.char_games(characters_ID INT, games_ID INT, CONSTRAINT char_games_att PRIMARY KEY(characters_ID, games_ID), 
+                        CONSTRAINT FK_char FOREIGN KEY (characters_ID) REFERENCES architect.characters (ID), CONSTRAINT FK_game FOREIGN KEY (games_ID) REFERENCES architect.games (ID))";
+		mysqli_query($con,$sql);
+	}
+        if(!mysqli_query($con,'select 1 from `downtimes`'))
 	{
 		#creates a table to store downtimes, associating each downtime to a game and a character.
 		$sql="CREATE TABLE if not exists architect.downtimes(ID INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(ID), game_ID INT, character_ID INT, downtime TEXT, response TEXT)";
 		mysqli_query($con,$sql);
 	}
-	if(!mysqli_query($con,'select 1 from `char_games`'))
-	{
-		#creates a table to associate the many games to many characters, so that you can have multiple games attended by multiple characters, SQL stuff
-		$sql="CREATE TABLE if not exists architect.char_games(characters_ID INT, games_ID INT, CONSTRAINT char_games_att PRIMARY KEY(characters_ID, games_ID), CONSTRAINT FK_char FOREIGN KEY (characters_ID) REFERENCES architect.characters (ID), CONSTRAINT FK_game FOREIGN KEY (games_ID) REFERENCES architect.games (ID))";
-		mysqli_query($con,$sql);
-	}
+	if(!mysqli_query($con,'select 1 from `powers`'))
+        {
+            $sql="CREATE TABLE if not exists architect.powers(ID INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(ID), name TINYTEXT)";
+            mysqli_query($con, $sql);
+        }
+        if(!mysqli_query($con,'select 1 from `char_powers`'))
+        {
+            $sql="CREATE TABLE if not exists architect.char_powers(characters_ID INT, powers_ID INT, CONSTRAINT char_powers_list PRIMARY KEY (characters_ID, powers_ID), 
+                    CONSTRAINT FK_char FOREIGN KEY (characters_ID) REFERENCES architect.characters (ID), CONSTRAINT FK_power FOREIGN KEY (powers_ID) REFERENCES architect.powers (ID))";
+            mysqli_query($con, $sql);
+        }
+        if(!mysqli_query($con,'select 1 from `merits`'))
+        {
+            $sql="CREATE TABLE if not exists architect.merits(ID INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(ID), name TINYTEXT, cost TINYINT)";
+            mysqli_query($con, $sql);
+        }
+        if(!mysqli_query($con,'select 1 from `char_merits`'))
+        {
+            $sql="CREATE TABLE if not exists architect.char_merits(characters_ID INT, merits_ID INT, CONSTRAINT char_merits_list PRIMARY KEY (characters_ID, merits_ID), 
+                    CONSTRAINT FK_char FOREIGN KEY (characters_ID) REFERENCES architect.characters (ID), CONSTRAINT FK_merit FOREIGN KEY (merits_ID) REFERENCES architect.merits (ID))";
+            mysqli_query($con, $sql);
+        }
 }
 
 #Adds a new user to the database  TODO: Check if the same user exists and report errors back to the user.
