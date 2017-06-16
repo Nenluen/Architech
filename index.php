@@ -22,7 +22,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	$user = input($_POST["user"]);
 	$pass = input($_POST["password"]);
-	login($con,$user,$pass);
+	login($con,$user,$pass, $sDb);
 }
 
 

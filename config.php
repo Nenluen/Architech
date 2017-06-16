@@ -1,11 +1,4 @@
 <?php
-#Stuff to leave alone
-
-#constant initializations
-$server = $sName = $sPass = $sDb = "";
-
-
-
 #Stuff you need to play with:
 
 #MySQL Server location:
@@ -16,10 +9,10 @@ $sPass = "12345";
 
 
 
-#more stuff to leave alone
+#Stuff to leave alone
 
 #database schema name
-$sDb = "architect";
+$sDb = "architech";
 #DB connection constant
 $con=mysqli_connect($server,$sName,$sPass,$sDb);
 #DB Failure output, to help debug DB connections
