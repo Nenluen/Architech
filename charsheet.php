@@ -8,6 +8,8 @@
         include "config.php";
         include "functions.php";
         $char = new Character;
+        addCharacter($con, $sDb, $char);
+        $char = readCharacter(1, $con, $sDb);
         ?>
 
         <div class="sheet">

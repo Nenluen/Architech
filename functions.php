@@ -1,6 +1,9 @@
 <?PHP
 #global variables, that will be used a lot
-class Character {
+class Character {    
+    #backend variables
+    public $id = 0;
+    
     #top title block
     public $name = "not defined";
     public $player = "not defined";
@@ -76,7 +79,15 @@ class Character {
     public $sub = 0;
     public $subS = "";
     
-    public function getName() {
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+        public function getName() {
         return $this->name;
     }
 
@@ -779,7 +790,7 @@ function loadSession($con, $name, $dBs)
 #a basic 'return all things on $table matching $search conditions' function, not sure if going to use yet, all SQL calls are pretty specific to the function that they're called from.
 function SQLQuery($con,$search)
 {
-	
+	return mysqli_query($con, $search);
 }
 
 function dotloop ($num)
@@ -795,4 +806,24 @@ function dotloop ($num)
  }
 }
 
+function readCharacter ($id, $con, $dBs)
+{
+    $charac = new Character;
+    $php = "SELECT * from $dBs.characters WHERE ID=$id";
+    $response = SQLQuery($con, $php);
+    if ($response->num_rows > 0)
+    {
+        while($row = $response->fetch_assoc())
+        {
+            $charac->setId($row["ID"]);
+            $charac->setName($row["name"]);
+        }
+    }
+    return $charac;
+}
+function addCharacter ($con, $dBs, Character $char)
+{
+    $sql="INSERT INTO $dBs.characters (name) VALUES ($char->getName())";
+    SQLQuery($con, $sql);
+}
 ?>
