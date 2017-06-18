@@ -17,6 +17,14 @@ class Character {
     public $experience = 0;
     public $experienceS = 0;
     
+    #other variables
+    public $health = 0;
+    public $willpower = 0;
+    public $potency = 0;
+    public $resource = 0;
+    public $morality = 0;
+    public $moralityT = "Humanity";
+    
     #Attributes
     public $int = 0;
     public $wit = 0;
@@ -79,6 +87,56 @@ class Character {
     public $sub = 0;
     public $subS = "";
     
+    
+    public function getHealth() {
+        return $this->health;
+    }
+
+    public function getWillpower() {
+        return $this->willpower;
+    }
+
+    public function getPotency() {
+        return $this->potency;
+    }
+
+    public function getResource() {
+        return $this->resource;
+    }
+
+    public function getMorality() {
+        return $this->morality;
+    }
+
+    public function getMoralityT() {
+        return $this->moralityT;
+    }
+
+    public function setHealth($health) {
+        $this->health = $health;
+    }
+
+    public function setWillpower($willpower) {
+        $this->willpower = $willpower;
+    }
+
+    public function setPotency($potency) {
+        $this->potency = $potency;
+    }
+
+    public function setResource($resource) {
+        $this->resource = $resource;
+    }
+
+    public function setMorality($morality) {
+        $this->morality = $morality;
+    }
+
+    public function setMoralityT($moralityT) {
+        $this->moralityT = $moralityT;
+    }
+
+        
     public function getId() {
         return $this->id;
     }
@@ -663,7 +721,7 @@ function checkTable($con, $dBs)
             #For New WOD Characters.
             $sql="CREATE TABLE if not exists $dBs.characters(ID INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(ID), name TINYTEXT NOT NULL, virtue TINYTEXT, vice TINYTEXT, type TINYTEXT, 
                     maingroup TINYTEXT, subgroup TINYTEXT, faction TINYTEXT, chronicle TINYTEXT, concept TINYTEXT, experience SMALLINT, experienceSpent SMALLINT, 
-                    health TINYINT, willpower TINYINT, potency TINYINT, resource TINYINT, morality TINYINT,
+                    health TINYINT, willpower TINYINT, potency TINYINT, resource TINYINT, morality TINYINT, moralityT TINYTEXT,
                     inte TINYINT, wit TINYINT, res TINYINT, str TINYINT, dex TINYINT, sta TINYINT, pre TINYINT, man TINYINT, com TINYINT, 
                     aca TINYINT, cra TINYINT, comp TINYINT, inv TINYINT, med TINYINT, occ TINYINT, pol TINYINT, sci TINYINT,
                     ath TINYINT, bra TINYINT, dri TINYINT, fir TINYINT, lar TINYINT, ste TINYINT, sur TINYINT, wea TINYINT,
@@ -823,7 +881,12 @@ function readCharacter ($id, $con, $dBs)
 }
 function addCharacter ($con, $dBs, Character $char)
 {
-    $sql="INSERT INTO $dBs.characters (name) VALUES ($char->getName())";
+    $sql="INSERT INTO $dBs.characters (name, virtue, vice, type, maingroup, subgroup, faction, chronicle, concept, experience, experienceSpent,
+        health, willpower, potency, resource, morality, moralityT inte, wit, res, str, dex, sta, pre, man, com,
+        aca, cra, comp, inv, med, occ, pol, sci, ath, bra, dri, fir, lar, ste, sur, wea, ani, emp, exp, inti, pre, soc, stre, sub,
+        acaS, craS, compS, invS, medS, occS, polS, sciS, athS, braS, driS, firS, larS, steS, surS, weaS, aniS, empS, expS, intiS, perS, socS, strS, subS) 
+        VALUES ($char->getName(), $char->getVirtue(), $char->getVice(), $char->getType(), $char->getMaingroup(), $char->getsubgroup,
+            $char->getFaction, $char->getChronicle, $char->getConcept, $char->getExperience, $char->getExperienceS)";
     SQLQuery($con, $sql);
 }
 ?>
