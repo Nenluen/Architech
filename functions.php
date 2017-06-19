@@ -791,6 +791,18 @@ function checkTable($con, $dBs)
                     CONSTRAINT FK_char_merits FOREIGN KEY (characters_ID) REFERENCES $dBs.characters (ID), CONSTRAINT FK_merit FOREIGN KEY (merits_ID) REFERENCES $dBs.merits (ID))";
             mysqli_query($con, $sql);
         }
+        if(!mysqli_query($con, 'select 1 from `skills`'))
+        {
+            $sql="CREATE TABLE if not exists $dBs.skills(ID INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (ID), name TINYTEXT)";
+            mysqli_query($con, $sql);
+        }
+        if(!mysqli_query($con, 'select 1 from `char_skills`'))
+        {
+            $sql="CREATE TABLE if not exists $dBs.char_skills(characters_ID INT, skills_ID INT, CONSTRAINT char_skills_list PRIMARY KEY (characters_ID, skills_ID), 
+                    CONSTRAINT FK_char_skills FOREIGN KEY (characters_ID) REFERENCES $dBs.characters (ID), CONSTRAINT FK_skills FOREIGN KEY (skills_ID) REFERENCES $dBs.skills (ID),
+                        specialization TINYTEXT)";
+            mysqli_query($con, $sql);
+        }
 }
 
 #Adds a new user to the database  TODO: Check if the same user exists and report errors back to the user.
