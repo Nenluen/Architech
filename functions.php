@@ -806,7 +806,7 @@ function checkTable($con, $dBs)
 }
 
 #Adds a new user to the database  TODO: Check if the same user exists and report errors back to the user.
-function newUser($con,$email,$password)
+function newUser($con,$email,$password,$dBs)
 {
 	
 	$sql="INSERT INTO $dBs.users (username,password,level) VALUES('" . $email . "','" . passHash($password) . "', 4)";

@@ -27,7 +27,7 @@ include "functions.php";
 		}
 		else
 		{
-				newUser($con,$email,$pass);
+				newUser($con,$email,$pass,$sDb);
 		}
 	}
 ?>
